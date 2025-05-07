@@ -62,6 +62,9 @@ class _MaterialControlsState extends State<MaterialControls>
 
   @override
   Widget build(BuildContext context) {
+    _subtitleOn = chewieController.showSubtitles &&
+        (chewieController.subtitle?.isNotEmpty ?? false);
+
     if (_latestValue.hasError) {
       return chewieController.errorBuilder?.call(
             context,
@@ -520,7 +523,7 @@ class _MaterialControlsState extends State<MaterialControls>
 
   void _onSubtitleTap() {
     setState(() {
-      _subtitleOn = !_subtitleOn;
+      chewieController.showSubtitles = !chewieController.showSubtitles;
     });
   }
 
@@ -535,8 +538,6 @@ class _MaterialControlsState extends State<MaterialControls>
   }
 
   Future<void> _initialize() async {
-    _subtitleOn = chewieController.showSubtitles &&
-        (chewieController.subtitle?.isNotEmpty ?? false);
     controller.addListener(_updateState);
 
     _updateState();

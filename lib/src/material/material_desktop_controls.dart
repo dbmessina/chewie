@@ -83,6 +83,9 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
 
   @override
   Widget build(BuildContext context) {
+    _subtitleOn = chewieController.showSubtitles &&
+        (chewieController.subtitle?.isNotEmpty ?? false);
+
     if (_latestValue.hasError) {
       return chewieController.errorBuilder?.call(
             context,
@@ -488,7 +491,7 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
 
   void _onSubtitleTap() {
     setState(() {
-      _subtitleOn = !_subtitleOn;
+      chewieController.showSubtitles = !chewieController.showSubtitles;
     });
   }
 
@@ -503,8 +506,6 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
   }
 
   Future<void> _initialize() async {
-    _subtitleOn = chewieController.showSubtitles &&
-        (chewieController.subtitle?.isNotEmpty ?? false);
     controller.addListener(_updateState);
 
     _updateState();
