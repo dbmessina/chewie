@@ -5,8 +5,50 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class PlayerWithControls extends StatelessWidget {
+class PlayerWithControls extends StatefulWidget {
   const PlayerWithControls({super.key});
+
+  @override
+  State<PlayerWithControls> createState() => _PlayerWithControlsState();
+}
+
+class _PlayerWithControlsState extends State<PlayerWithControls> {
+  bool _hasPlayedOnce = false;
+  VideoPlayerController? _controller;
+
+  void _playingListener() {
+    final playing = _controller?.value.isPlaying ?? false;
+
+    if (playing && !_hasPlayedOnce) {
+      setState(() {
+        _hasPlayedOnce = true;
+      });
+
+      _controller?.removeListener(_playingListener);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final controller = ChewieController.of(context).videoPlayerController;
+
+    if (_controller != controller) {
+      _controller?.removeListener(_playingListener);
+
+      if (!_hasPlayedOnce) {
+        _controller = controller;
+        controller.addListener(_playingListener);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.removeListener(_playingListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +77,6 @@ class PlayerWithControls extends StatelessWidget {
     ) {
       return Stack(
         children: <Widget>[
-          if (chewieController.placeholder != null)
-            chewieController.placeholder!,
           InteractiveViewer(
             transformationController: chewieController.transformationController,
             maxScale: chewieController.maxScale,
@@ -50,6 +90,8 @@ class PlayerWithControls extends StatelessWidget {
               ),
             ),
           ),
+          if (chewieController.placeholder != null && !_hasPlayedOnce)
+            chewieController.placeholder!,
           if (chewieController.overlay != null) chewieController.overlay!,
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
