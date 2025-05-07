@@ -58,8 +58,8 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
     super.deactivate();
   }
 
-  void _seekToRelativePosition(Offset globalPosition) {
-    controller.seekTo(context.calcRelativePosition(
+  Future<void> _seekToRelativePosition(Offset globalPosition) async {
+    await controller.seekTo(context.calcRelativePosition(
       controller.value.duration,
       globalPosition,
     ));
@@ -100,14 +100,14 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
 
               widget.onDragUpdate?.call();
             },
-            onHorizontalDragEnd: (DragEndDetails details) {
-              if (_controllerWasPlaying) {
-                controller.play();
+            onHorizontalDragEnd: (DragEndDetails details) async {
+              if (_latestDraggableOffset != null) {
+                await _seekToRelativePosition(_latestDraggableOffset!);
+                _latestDraggableOffset = null;
               }
 
-              if (_latestDraggableOffset != null) {
-                _seekToRelativePosition(_latestDraggableOffset!);
-                _latestDraggableOffset = null;
+              if (_controllerWasPlaying) {
+                controller.play();
               }
 
               widget.onDragEnd?.call();
