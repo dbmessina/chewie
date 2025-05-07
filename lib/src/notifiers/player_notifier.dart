@@ -8,14 +8,23 @@ import 'package:flutter/material.dart';
 class PlayerNotifier extends ChangeNotifier {
   PlayerNotifier._(
     bool hideStuff,
-  ) : _hideStuff = hideStuff;
+    bool hasPlayedOnce,
+  )   : _hideStuff = hideStuff,
+        _hasPlayedOnce = hasPlayedOnce;
 
   bool _hideStuff;
+  bool _hasPlayedOnce;
 
   bool get hideStuff => _hideStuff;
+  bool get hasPlayedOnce => _hasPlayedOnce;
 
   set hideStuff(bool value) {
     _hideStuff = value;
+    notifyListeners();
+  }
+
+  set hasPlayedOnce(bool value) {
+    _hasPlayedOnce = value;
     notifyListeners();
   }
 
@@ -23,6 +32,7 @@ class PlayerNotifier extends ChangeNotifier {
   static PlayerNotifier init() {
     return PlayerNotifier._(
       true,
+      false,
     );
   }
 }

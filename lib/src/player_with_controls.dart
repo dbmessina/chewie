@@ -13,17 +13,14 @@ class PlayerWithControls extends StatefulWidget {
 }
 
 class _PlayerWithControlsState extends State<PlayerWithControls> {
-  bool _hasPlayedOnce = false;
   VideoPlayerController? _controller;
 
   void _playingListener() {
     final playing = _controller?.value.isPlaying ?? false;
+    final playerNotifier = Provider.of<PlayerNotifier>(context, listen: false);
 
-    if (playing && !_hasPlayedOnce) {
-      setState(() {
-        _hasPlayedOnce = true;
-      });
-
+    if (playing && !playerNotifier.hasPlayedOnce) {
+      playerNotifier.hasPlayedOnce = true;
       _controller?.removeListener(_playingListener);
     }
   }
@@ -33,11 +30,12 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
     super.didChangeDependencies();
 
     final controller = ChewieController.of(context).videoPlayerController;
+    final playerNotifier = Provider.of<PlayerNotifier>(context, listen: false);
 
     if (_controller != controller) {
       _controller?.removeListener(_playingListener);
 
-      if (!_hasPlayedOnce) {
+      if (!playerNotifier.hasPlayedOnce) {
         _controller = controller;
         controller.addListener(_playingListener);
       }
@@ -90,8 +88,14 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
               ),
             ),
           ),
-          if (chewieController.placeholder != null && !_hasPlayedOnce)
-            chewieController.placeholder!,
+          if (chewieController.placeholder != null)
+            Consumer<PlayerNotifier>(
+              builder: (context, notifier, _) {
+                return notifier.hasPlayedOnce
+                    ? const SizedBox.shrink()
+                    : chewieController.placeholder!;
+              },
+            ),
           if (chewieController.overlay != null) chewieController.overlay!,
           if (Theme.of(context).platform != TargetPlatform.iOS)
             Consumer<PlayerNotifier>(
