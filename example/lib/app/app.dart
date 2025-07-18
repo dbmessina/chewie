@@ -1,4 +1,3 @@
-
 import 'package:chewie/chewie.dart';
 import 'package:chewie_example/app/theme.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +109,7 @@ class _ChewieDemoState extends State<ChewieDemo> {
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController1,
       autoPlay: true,
+      zoomAndPan: true,
       looping: true,
       progressIndicatorDelay:
           bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,

@@ -98,9 +98,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
             children: [
               if (_displayBufferingIndicator)
                 _chewieController?.bufferingBuilder?.call(context) ??
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                    const Center(child: CircularProgressIndicator())
               else
                 _buildHitArea(),
               Column(
@@ -158,10 +156,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
     super.didChangeDependencies();
   }
 
-  GestureDetector _buildOptionsButton(
-    Color iconColor,
-    double barHeight,
-  ) {
+  GestureDetector _buildOptionsButton(Color iconColor, double barHeight) {
     final options = <OptionItem>[];
 
     if (chewieController.additionalOptions != null &&
@@ -196,11 +191,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
         color: Colors.transparent,
         padding: const EdgeInsets.only(left: 4.0, right: 8.0),
         margin: const EdgeInsets.only(right: 6.0),
-        child: Icon(
-          Icons.more_vert,
-          color: iconColor,
-          size: 18,
-        ),
+        child: Icon(Icons.more_vert, color: iconColor, size: 18),
       ),
     );
   }
@@ -234,9 +225,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
         ),
         child: Text(
           currentSubtitle.first!.text.toString(),
-          style: const TextStyle(
-            fontSize: 18,
-          ),
+          style: const TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
       ),
@@ -261,10 +250,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: BackdropFilter(
-              filter: ui.ImageFilter.blur(
-                sigmaX: 10.0,
-                sigmaY: 10.0,
-              ),
+              filter: ui.ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
               child: Container(
                 height: barHeight,
                 color: backgroundColor,
@@ -286,7 +272,11 @@ class _CupertinoControlsState extends State<CupertinoControls>
                           _buildRemaining(iconColor),
                           _buildSubtitleToggle(iconColor, barHeight),
                           if (chewieController.allowPlaybackSpeedChanging)
-                            _buildSpeedButton(controller, iconColor, barHeight),
+                            _buildSpeedButton(
+                              controller,
+                              iconColor,
+                              barHeight,
+                            ),
                           if (chewieController.additionalOptions != null &&
                               chewieController
                                   .additionalOptions!(context).isNotEmpty)
@@ -304,10 +294,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
   Widget _buildLive(Color iconColor) {
     return Padding(
       padding: const EdgeInsets.only(right: 12.0),
-      child: Text(
-        'LIVE',
-        style: TextStyle(color: iconColor, fontSize: 12.0),
-      ),
+      child: Text('LIVE', style: TextStyle(color: iconColor, fontSize: 12.0)),
     );
   }
 
@@ -440,10 +427,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
       child: Container(
         height: barHeight,
         color: Colors.transparent,
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
-        ),
+        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
         child: AnimatedPlayPause(
           color: widget.iconColor,
           playing: controller.value.isPlaying,
@@ -459,10 +443,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
       padding: const EdgeInsets.only(right: 12.0),
       child: Text(
         formatDuration(position),
-        style: TextStyle(
-          color: iconColor,
-          fontSize: 12.0,
-        ),
+        style: TextStyle(color: iconColor, fontSize: 12.0),
       ),
     );
   }
@@ -490,10 +471,7 @@ class _CupertinoControlsState extends State<CupertinoControls>
         height: barHeight,
         color: Colors.transparent,
         margin: const EdgeInsets.only(right: 10.0),
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
-        ),
+        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
         child: Icon(
           Icons.subtitles,
           color: _subtitleOn ? iconColor : Colors.grey[700],
@@ -516,15 +494,8 @@ class _CupertinoControlsState extends State<CupertinoControls>
         height: barHeight,
         color: Colors.transparent,
         margin: const EdgeInsets.only(left: 10.0),
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
-        ),
-        child: Icon(
-          CupertinoIcons.gobackward_15,
-          color: iconColor,
-          size: 18.0,
-        ),
+        padding: const EdgeInsets.only(left: 6.0, right: 6.0),
+        child: Icon(CupertinoIcons.gobackward_15, color: iconColor, size: 18.0),
       ),
     );
   }
@@ -535,18 +506,9 @@ class _CupertinoControlsState extends State<CupertinoControls>
       child: Container(
         height: barHeight,
         color: Colors.transparent,
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 8.0,
-        ),
-        margin: const EdgeInsets.only(
-          right: 8.0,
-        ),
-        child: Icon(
-          CupertinoIcons.goforward_15,
-          color: iconColor,
-          size: 18.0,
-        ),
+        padding: const EdgeInsets.only(left: 6.0, right: 8.0),
+        margin: const EdgeInsets.only(right: 8.0),
+        child: Icon(CupertinoIcons.goforward_15, color: iconColor, size: 18.0),
       ),
     );
   }
@@ -583,23 +545,14 @@ class _CupertinoControlsState extends State<CupertinoControls>
       child: Container(
         height: barHeight,
         color: Colors.transparent,
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 8.0,
-        ),
-        margin: const EdgeInsets.only(
-          right: 8.0,
-        ),
+        padding: const EdgeInsets.only(left: 6.0, right: 8.0),
+        margin: const EdgeInsets.only(right: 8.0),
         child: Transform(
           alignment: Alignment.center,
           transform: Matrix4.skewY(0.0)
             ..rotateX(math.pi)
             ..rotateZ(math.pi * 0.8),
-          child: Icon(
-            Icons.speed,
-            color: iconColor,
-            size: 18.0,
-          ),
+          child: Icon(Icons.speed, color: iconColor, size: 18.0),
         ),
       ),
     );
@@ -652,6 +605,8 @@ class _CupertinoControlsState extends State<CupertinoControls>
   }
 
   Future<void> _initialize() async {
+    _subtitleOn = chewieController.showSubtitles &&
+        (chewieController.subtitle?.isNotEmpty ?? false);
     controller.addListener(_updateState);
 
     _updateState();
@@ -707,30 +662,10 @@ class _CupertinoControlsState extends State<CupertinoControls>
           },
           colors: chewieController.cupertinoProgressColors ??
               ChewieProgressColors(
-                playedColor: const Color.fromARGB(
-                  120,
-                  255,
-                  255,
-                  255,
-                ),
-                handleColor: const Color.fromARGB(
-                  255,
-                  255,
-                  255,
-                  255,
-                ),
-                bufferedColor: const Color.fromARGB(
-                  60,
-                  255,
-                  255,
-                  255,
-                ),
-                backgroundColor: const Color.fromARGB(
-                  20,
-                  255,
-                  255,
-                  255,
-                ),
+                playedColor: const Color.fromARGB(120, 255, 255, 255),
+                handleColor: const Color.fromARGB(255, 255, 255, 255),
+                bufferedColor: const Color.fromARGB(60, 255, 255, 255),
+                backgroundColor: const Color.fromARGB(20, 255, 255, 255),
               ),
           draggableProgressBar: chewieController.draggableProgressBar,
         ),

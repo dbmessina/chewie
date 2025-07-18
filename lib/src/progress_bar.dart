@@ -263,10 +263,7 @@ class _ProgressBarPainter extends CustomPainter {
 }
 
 extension RelativePositionExtensions on BuildContext {
-  Duration calcRelativePosition(
-    Duration videoDuration,
-    Offset globalPosition,
-  ) {
+  Duration calcRelativePosition(Duration videoDuration, Offset globalPosition) {
     final box = findRenderObject()! as RenderBox;
     final Offset tapPos = box.globalToLocal(globalPosition);
     final double relative = (tapPos.dx / box.size.width).clamp(0, 1);

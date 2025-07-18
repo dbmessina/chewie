@@ -73,19 +73,14 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
       ChewieController chewieController,
       BuildContext context,
     ) {
-      return Stack(
-        children: <Widget>[
-          InteractiveViewer(
-            transformationController: chewieController.transformationController,
-            maxScale: chewieController.maxScale,
-            panEnabled: chewieController.zoomAndPan,
-            scaleEnabled: chewieController.zoomAndPan,
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: chewieController.aspectRatio ??
-                    chewieController.videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(chewieController.videoPlayerController),
-              ),
+      final playerNotifier = context.read<PlayerNotifier>();
+      final child = Stack(
+        children: [
+          Center(
+            child: AspectRatio(
+              aspectRatio: chewieController.aspectRatio ??
+                  chewieController.videoPlayerController.value.aspectRatio,
+              child: VideoPlayer(chewieController.videoPlayerController),
             ),
           ),
           if (chewieController.placeholder != null)
@@ -108,9 +103,7 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
                 visible: !notifier.hideStuff,
                 child: AnimatedOpacity(
                   opacity: notifier.hideStuff ? 0.0 : 0.8,
-                  duration: const Duration(
-                    milliseconds: 250,
-                  ),
+                  duration: const Duration(milliseconds: 250),
                   child: const DecoratedBox(
                     decoration: BoxDecoration(color: Colors.black54),
                     child: SizedBox.expand(),
@@ -127,20 +120,40 @@ class _PlayerWithControlsState extends State<PlayerWithControls> {
             ),
         ],
       );
+
+      if (chewieController.zoomAndPan ||
+          chewieController.transformationController != null) {
+        return InteractiveViewer(
+          transformationController: chewieController.transformationController,
+          maxScale: chewieController.maxScale,
+          panEnabled: chewieController.zoomAndPan,
+          scaleEnabled: chewieController.zoomAndPan,
+          onInteractionUpdate: chewieController.zoomAndPan
+              ? (_) => playerNotifier.hideStuff = true
+              : null,
+          onInteractionEnd: chewieController.zoomAndPan
+              ? (_) => playerNotifier.hideStuff = false
+              : null,
+          child: child,
+        );
+      }
+
+      return child;
     }
 
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      return Center(
-        child: SizedBox(
-          height: constraints.maxHeight,
-          width: constraints.maxWidth,
-          child: AspectRatio(
-            aspectRatio: calculateAspectRatio(context),
-            child: buildPlayerWithControls(chewieController, context),
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Center(
+          child: SizedBox(
+            height: constraints.maxHeight,
+            width: constraints.maxWidth,
+            child: AspectRatio(
+              aspectRatio: calculateAspectRatio(context),
+              child: buildPlayerWithControls(chewieController, context),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

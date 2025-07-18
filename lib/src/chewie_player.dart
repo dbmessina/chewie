@@ -13,22 +13,20 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-typedef ChewieRoutePageBuilder = Widget Function(
-  BuildContext context,
-  Animation<double> animation,
-  Animation<double> secondaryAnimation,
-  ChewieControllerProvider controllerProvider,
-);
+typedef ChewieRoutePageBuilder =
+    Widget Function(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      ChewieControllerProvider controllerProvider,
+    );
 
 /// A Video Player with Material and Cupertino skins.
 ///
 /// `video_player` is pretty low level. Chewie wraps it in a friendly skin to
 /// make it easy to use!
 class Chewie extends StatefulWidget {
-  const Chewie({
-    super.key,
-    required this.controller,
-  });
+  const Chewie({super.key, required this.controller});
 
   /// The [ChewieController]
   final ChewieController controller;
@@ -223,7 +221,6 @@ class ChewieState extends State<Chewie> {
           DeviceOrientation.landscapeRight,
         ]);
       }
-
       /// Video h > w means we force portrait
       else if (isPortraitVideo) {
         SystemChrome.setPreferredOrientations([
@@ -231,7 +228,6 @@ class ChewieState extends State<Chewie> {
           DeviceOrientation.portraitDown,
         ]);
       }
-
       /// Otherwise if h == w (square video)
       else {
         SystemChrome.setPreferredOrientations(DeviceOrientation.values);
@@ -310,9 +306,9 @@ class ChewieController extends ChangeNotifier {
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
     this.pauseOnBackgroundTap = false,
   }) : assert(
-          playbackSpeeds.every((speed) => speed > 0),
-          'The playbackSpeeds values must all be greater than 0',
-        ) {
+         playbackSpeeds.every((speed) => speed > 0),
+         'The playbackSpeeds values must all be greater than 0',
+       ) {
     _initialize();
   }
 
@@ -365,7 +361,8 @@ class ChewieController extends ChangeNotifier {
       Animation<double>,
       Animation<double>,
       ChewieControllerProvider,
-    )? routePageBuilder,
+    )?
+    routePageBuilder,
     bool? pauseOnBackgroundTap,
   }) {
     return ChewieController(
@@ -383,6 +380,12 @@ class ChewieController extends ChangeNotifier {
           cupertinoProgressColors ?? this.cupertinoProgressColors,
       materialProgressColors:
           materialProgressColors ?? this.materialProgressColors,
+      zoomAndPan: zoomAndPan ?? this.zoomAndPan,
+      maxScale: maxScale ?? this.maxScale,
+      controlsSafeAreaMinimum:
+          controlsSafeAreaMinimum ?? this.controlsSafeAreaMinimum,
+      transformationController:
+          transformationController ?? this.transformationController,
       materialSeekButtonFadeDuration:
           materialSeekButtonFadeDuration ?? this.materialSeekButtonFadeDuration,
       materialSeekButtonSize:
@@ -409,14 +412,16 @@ class ChewieController extends ChangeNotifier {
           allowPlaybackSpeedChanging ?? this.allowPlaybackSpeedChanging,
       useRootNavigator: useRootNavigator ?? this.useRootNavigator,
       playbackSpeeds: playbackSpeeds ?? this.playbackSpeeds,
-      systemOverlaysOnEnterFullScreen: systemOverlaysOnEnterFullScreen ??
+      systemOverlaysOnEnterFullScreen:
+          systemOverlaysOnEnterFullScreen ??
           this.systemOverlaysOnEnterFullScreen,
       deviceOrientationsOnEnterFullScreen:
           deviceOrientationsOnEnterFullScreen ??
-              this.deviceOrientationsOnEnterFullScreen,
+          this.deviceOrientationsOnEnterFullScreen,
       systemOverlaysAfterFullScreen:
           systemOverlaysAfterFullScreen ?? this.systemOverlaysAfterFullScreen,
-      deviceOrientationsAfterFullScreen: deviceOrientationsAfterFullScreen ??
+      deviceOrientationsAfterFullScreen:
+          deviceOrientationsAfterFullScreen ??
           this.deviceOrientationsAfterFullScreen,
       routePageBuilder: routePageBuilder ?? this.routePageBuilder,
       hideControlsTimer: hideControlsTimer ?? this.hideControlsTimer,
@@ -449,7 +454,8 @@ class ChewieController extends ChangeNotifier {
   final Future<void> Function(
     BuildContext context,
     List<OptionItem> chewieOptions,
-  )? optionsBuilder;
+  )?
+  optionsBuilder;
 
   /// Add your own additional options on top of chewie options
   final List<OptionItem> Function(BuildContext context)? additionalOptions;
@@ -490,10 +496,14 @@ class ChewieController extends ChangeNotifier {
   /// Whether or not to show the controls at all
   final bool showControls;
 
-  /// Controller to pass into the [InteractiveViewer] component
+  /// Controller to pass into the [InteractiveViewer] component.
+  /// If it is required to control the transformation only via the controller,
+  /// `zoomAndPan` should be set to false.
   final TransformationController? transformationController;
 
-  /// Whether or not to allow zooming and panning
+  /// Whether or not to allow zooming and panning.
+  /// This can still be false, and the `transformationController` can be used to control the
+  /// transformation.
   final bool zoomAndPan;
 
   /// Max scale when zooming
@@ -506,7 +516,7 @@ class ChewieController extends ChangeNotifier {
   /// When the video playback runs into an error, you can build a custom
   /// error message.
   final Widget Function(BuildContext context, String errorMessage)?
-      errorBuilder;
+  errorBuilder;
 
   /// When the video is buffering, you can build a custom widget.
   final WidgetBuilder? bufferingBuilder;
