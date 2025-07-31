@@ -308,6 +308,7 @@ class ChewieController extends ChangeNotifier {
     this.hideControlsTimer = defaultHideControlsTimer,
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
     this.pauseOnBackgroundTap = false,
+    this.onUserPlayPause,
   }) : _showSubtitles = showSubtitles,
        assert(
          playbackSpeeds.every((speed) => speed > 0),
@@ -612,6 +613,10 @@ class ChewieController extends ChangeNotifier {
 
   /// Defines if the player should pause when the background is tapped
   final bool pauseOnBackgroundTap;
+
+  /// Called when the user manually presses play or pause.
+  /// This is not called when play/pause state changes programmatically.
+  final void Function(bool isPlaying)? onUserPlayPause;
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =

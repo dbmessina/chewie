@@ -547,18 +547,21 @@ class _MaterialControlsState extends State<MaterialControls>
         notifier.hideStuff = false;
         _hideTimer?.cancel();
         controller.pause();
+        chewieController.onUserPlayPause?.call(false);
       } else {
         _cancelAndRestartTimer();
 
         if (!controller.value.isInitialized) {
           controller.initialize().then((_) {
             controller.play();
+            chewieController.onUserPlayPause?.call(true);
           });
         } else {
           if (isFinished) {
             controller.seekTo(Duration.zero);
           }
           controller.play();
+          chewieController.onUserPlayPause?.call(true);
         }
       }
     });

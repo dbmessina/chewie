@@ -512,6 +512,7 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
 
       _hideTimer?.cancel();
       controller.pause();
+      chewieController.onUserPlayPause?.call(false);
     } else {
       _cancelAndRestartTimer();
 
@@ -519,10 +520,12 @@ class _MaterialDesktopControlsState extends State<MaterialDesktopControls>
         controller.initialize().then((_) {
           //[VideoPlayerController.play] If the video is at the end, this method starts playing from the beginning
           controller.play();
+          chewieController.onUserPlayPause?.call(true);
         });
       } else {
         //[VideoPlayerController.play] If the video is at the end, this method starts playing from the beginning
         controller.play();
+        chewieController.onUserPlayPause?.call(true);
       }
     }
   }
