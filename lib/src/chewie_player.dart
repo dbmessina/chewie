@@ -242,8 +242,11 @@ class ChewieState extends State<Chewie> {
     widget.controller.videoPlayerController.initialize().then((_) async {
       widget.controller._initialize();
       widget.controller.videoPlayerController.seekTo(prevPosition);
-      await widget.controller.videoPlayerController.play();
-      widget.controller.videoPlayerController.pause();
+
+      if (!widget.controller.isPlaying) {
+        await widget.controller.videoPlayerController.play();
+        widget.controller.videoPlayerController.pause();
+      }
     });
   }
 }
@@ -284,7 +287,7 @@ class ChewieController extends ChangeNotifier {
     this.zoomAndPan = false,
     this.maxScale = 2.5,
     this.subtitle,
-    this.showSubtitles = false,
+    bool showSubtitles = false,
     this.subtitleBuilder,
     this.customControls,
     this.errorBuilder,
@@ -305,7 +308,8 @@ class ChewieController extends ChangeNotifier {
     this.hideControlsTimer = defaultHideControlsTimer,
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
     this.pauseOnBackgroundTap = false,
-  }) : assert(
+  }) : _showSubtitles = showSubtitles,
+       assert(
          playbackSpeeds.every((speed) => speed > 0),
          'The playbackSpeeds values must all be greater than 0',
        ) {
@@ -466,11 +470,20 @@ class ChewieController extends ChangeNotifier {
   /// Add a List of Subtitles here in `Subtitles.subtitle`
   Subtitles? subtitle;
 
+  bool _showSubtitles;
+
   /// Determines whether subtitles should be shown by default when the video starts.
   ///
   /// If set to `true`, subtitles will be displayed automatically when the video
   /// begins playing. If set to `false`, subtitles will be hidden by default.
-  bool showSubtitles;
+  bool get showSubtitles => _showSubtitles;
+
+  set showSubtitles(bool value) {
+    if (_showSubtitles != value) {
+      _showSubtitles = value;
+      notifyListeners();
+    }
+  }
 
   /// The controller for the video you want to play
   final VideoPlayerController videoPlayerController;
