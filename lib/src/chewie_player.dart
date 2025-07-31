@@ -69,15 +69,17 @@ class ChewieState extends State<Chewie> {
   }
 
   Future<void> listener() async {
-    if (isControllerFullScreen && !_isFullScreen) {
-      _isFullScreen = isControllerFullScreen;
-      await _pushFullScreenWidget(context);
-    } else if (_isFullScreen) {
-      Navigator.of(
-        context,
-        rootNavigator: widget.controller.useRootNavigator,
-      ).pop();
-      _isFullScreen = false;
+    if (isControllerFullScreen != _isFullScreen) {
+      if (isControllerFullScreen && !_isFullScreen) {
+        _isFullScreen = isControllerFullScreen;
+        await _pushFullScreenWidget(context);
+      } else if (_isFullScreen) {
+        Navigator.of(
+          context,
+          rootNavigator: widget.controller.useRootNavigator,
+        ).pop();
+        _isFullScreen = false;
+      }
     }
   }
 
